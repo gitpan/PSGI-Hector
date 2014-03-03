@@ -16,7 +16,7 @@ name: PSGI-Hector
 provides:
   PSGI::Hector:
     file: lib/PSGI/Hector.pm
-    version: 1.0
+    version: 1.1
   PSGI::Hector::Base:
     file: lib/PSGI/Hector/Base.pm
   PSGI::Hector::Log:
@@ -49,4 +49,4 @@ requires:
   Template: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 1.0
+version: 1.1
