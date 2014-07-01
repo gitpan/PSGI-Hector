@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
-plan(tests => 8);
+plan(tests => 10);
 use lib qw(../lib lib);
 use PSGI::Hector;
 
@@ -40,13 +40,23 @@ isa_ok($request, "PSGI::Hector::Request");
 is($m->getThisUrl(), "http://www.test.com:8080/test.cgi", "PSGI::Hector::Utils::getThisUrl()");
 
 #6
-is($m->getFullUrl(), "http://www.test.com:8080/test.cgi", "PSGI::Hector::getFullUrl()");
-
-#7
 is($m->getOption('debug'), 1, "PSGI::Hector::getOption()");
 
-#8
+#7
 {
 	my $env = $m->getEnv();
 	is($env{'REQUEST_METHOD'}, "GET", "PSGI::Hector::getEnv()");
+}
+
+#8
+is($m->getUrlForAction("someAction", "a=b&c=d"), "/someAction?a=b&c=d", "PSGI::Hector::getUrlForAction()");
+
+#9
+is($m->getFullUrlForAction("someAction", "a=b&c=d"), "http://www.test.com:8080/someAction?a=b&c=d", "PSGI::Hector::getFullUrlForAction()");
+
+#10
+{
+	$m = PSGI::Hector->new($options, \%env);
+	my $response = $m->getResponse();
+	is($response->header("Set-Cookie"), undef, "New session not created on new()")
 }

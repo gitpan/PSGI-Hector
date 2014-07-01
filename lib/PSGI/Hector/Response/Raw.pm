@@ -62,8 +62,8 @@ sub display{	#this sub will display the page headers if needed
 		return $self->_getContent();	#get the contents of the template
 	}
 	else{	#first output so display any headers
-		if(!$self->header("Content-type")){	#set default content type
-			$self->header("Content-type" => "text/html");
+		if(!$self->header("Content-Type")){	#set default content type
+			$self->header("Content-Type" => "text/html");
 		}
 		if(!$self->header("Location")){	#if we dont have a redirect
 			my $content = $self->_getContent();	#get the contents of the template
@@ -99,7 +99,9 @@ sub _getContent{
 
 MacGyveR <dumb@cpan.org>
 
-Development questions, bug reports, and patches are welcome to the above address
+Development questions, bug reports, and patches are welcome to the above address.
+
+=head1 See Also
 
 =head1 Copyright
 

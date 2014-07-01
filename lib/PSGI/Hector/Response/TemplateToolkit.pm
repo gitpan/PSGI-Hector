@@ -112,8 +112,8 @@ sub display{	#this sub will display the page headers if needed
 			$self->message('Found');
 		}
 		else{ #if we dont have a redirect
-			if(!$self->header("Content-type")){ #set default content type
-				$self->header("Content-type" => "text/html");
+			if(!$self->header("Content-Type")){ #set default content type
+				$self->header("Content-Type" => "text/html");
 			}
 			my $content = $self->_getContent();	#get the contents of the template
 			$self->add_content_utf8($content);
@@ -252,7 +252,9 @@ L<Template>
 
 MacGyveR <dumb@cpan.org>
 
-Development questions, bug reports, and patches are welcome to the above address
+Development questions, bug reports, and patches are welcome to the above address.
+
+=head1 See Also
 
 =head1 Copyright
 

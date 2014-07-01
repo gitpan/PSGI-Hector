@@ -112,6 +112,12 @@ sub getHeader{
 	}
 	return $value;
 }
+############################################################################################################
+sub getCookie{	#returns the value of a cookie
+	my($self, $name) = @_;
+	my $cookies = $self->cookies();
+	$cookies->{$name} || undef;
+}
 ####################################################
 sub __stringfy{
 	my($self, $item) = @_;
@@ -130,6 +136,8 @@ sub __stringfy{
 MacGyveR <dumb@cpan.org>
 
 Development questions, bug reports, and patches are welcome to the above address
+
+=head1 See Also
 
 =head1 Copyright
 

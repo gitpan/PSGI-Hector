@@ -42,7 +42,7 @@ use base qw(PSGI::Hector::Base PSGI::Hector::Utils PSGI::Hector::Log);
 use PSGI::Hector::Response;
 use PSGI::Hector::Session;	#for session management
 use PSGI::Hector::Request;
-our $VERSION = "1.1";
+our $VERSION = "1.2";
 #########################################################
 
 =head2 new(\%options)
@@ -52,7 +52,7 @@ our $VERSION = "1.1";
 		'checkReferer' => 0,
 		'sessionClass' => 'Some::Class',
 		'requestClass' => 'Some::Class',
-		'SefUrls' => 0,
+		'sefUrls' => 0,
 		'debug' => 1
 	};
 	my $h = PSGI::Hector->new($options);
@@ -73,7 +73,7 @@ sub new{
 		if($self->getOption('sessionClass')){
 			$sessionClass = $self->getOption('sessionClass');
 		}
-		$self->{'_session'} = $sessionClass->new();	
+		$self->{'_session'} = $sessionClass->new($self);	
 		my $requestClass = $self->__getFullClassName("Request");
 		if($self->getOption('requestClass')){
 			$requestClass = $self->getOption('requestClass');
@@ -87,7 +87,7 @@ sub new{
 		return $self;
 	}
 	else{
-		confess("No reponse plugin option provided");
+		confess("No response plugin option provided");
 	}
 	return undef;
 }
@@ -183,23 +183,20 @@ sub getAction{
 
 =pod
 
-=head2 getFullUrl()
+=head2 getUrlForAction($action, $queryString)
 
-	my $url = $h->getFullUrl();
+	my $url = $h->getUrlForAction("someAction", "a=b&c=d");
 
-Returns the full URL for the application.
+Returns the URL for the application with the given action and query string.
 
 =cut
 
 #########################################################
-sub getFullUrl{
-	my $self = shift;
-	my $url = undef;
-	if(defined($self->getOption('sefUrls')) && $self->getOption('sefUrls')){	#do we have search engine friendly urls
-		$url = $self->getSiteUrl() . "/";
-	}
-	else{
-		$url = $self->getThisUrl();
+sub getUrlForAction{
+	my($self, $action, $query) = @_;
+	my $url = "/" . $action;
+	if($query){	#add query string
+		$url .= "?" . $query;
 	}
 	return $url;
 }
@@ -207,28 +204,18 @@ sub getFullUrl{
 
 =pod
 
-=head2 getUrlForAction($action, $queryString)
+=head2 getFullUrlForAction($action, $queryString)
 
-	my $url = $h->getUrlForAction("someAction", "a=b&c=d");
+	my $url = $h->getFullUrlForAction("someAction", "a=b&c=d");
 
-Returns the Full URL for the application with the given action and query string
+Returns the Full URL for the application with the given action and query string and hostname.
 
 =cut
 
 #########################################################
-sub getUrlForAction{
+sub getFullUrlForAction{
 	my($self, $action, $query) = @_;
-	my $url = undef;
-	if(defined($self->getOption('sefUrls')) && $self->getOption('sefUrls')){	#do we have search engine friendly urls
-		$url = $self->getSiteUrl() . "/" . $action;
-	}
-	else{
-		$url = $self->getThisUrl() . "?action=" . $action;
-	}
-	if($query){	#add query string
-		$url .= "?" . $query;
-	}
-	return $url;
+	$self->getSiteUrl() . $self->getUrlForAction($action, $query);
 }
 #########################################################
 
@@ -263,7 +250,6 @@ sub run{	#run the code for the given action
 		my $subName = "handle" . ucfirst($action);	#add prefix for security
 		my $class = ref($self);
 		if($class->can($subName)){	#default action sub exists
-			$self->log('Using action from auto default');	
 			eval{
 				$self->$subName();
 			};
@@ -274,7 +260,7 @@ sub run{	#run the code for the given action
 		else{	#no code to execute
 			$response->code(404);
 			$response->message('Not Found');
-			$response->setError("No action sub found for: $action");
+			$response->setError("No action found for: $action");
 		}
 	}
 	return $response->display();	#display the output to the browser
@@ -344,26 +330,6 @@ sub _init{	#things to do when this object is created
 	}
 	my $response = $self->getResponse();
 	my $session = $self->getSession();
-	my $existingSession = 0;
-	#don't care about errors below
-	if($session->read()){	#check for an existing session
-		if($session->validate()){
-			$existingSession = 1;
-			if($self->getOption('debug')){
-				$self->log("Existing session: " . $session->getId());
-			}
-		}
-	}
-	if(!$existingSession){	#start a new session
-		if($session->create({}, $response)){
-			if($self->getOption('debug')){
-				$self->log("Created new session: " . $session->getId());
-			}
-		}
-		else{
-			$response->setError($session->getError());	#now care about errors
-		}
-	}
 	return 1;
 }
 ###########################################################
@@ -466,6 +432,8 @@ To change the session file save path use the following code at the top of your s
 MacGyveR <dumb@cpan.org>
 
 Development questions, bug reports, and patches are welcome to the above address
+
+=head1 See Also
 
 =head1 Copyright
 

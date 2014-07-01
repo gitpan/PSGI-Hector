@@ -27,13 +27,17 @@
       "runtime" : {
          "requires" : {
             "CGI::Simple::Cookie" : "0",
+            "Cache::FileCache" : "0",
             "Carp" : "0",
             "Class::Load" : "0",
             "Data::Dumper" : "0",
             "File::Basename" : "0",
             "File::Spec" : "0",
+            "File::Temp" : "0",
             "HTTP::Response" : "0",
             "Plack" : "0",
+            "Plack::Middleware::Deflater" : "0",
+            "Plack::Middleware::Static::Minifier" : "0",
             "Template" : "0"
          }
       }
@@ -41,13 +45,16 @@
    "provides" : {
       "PSGI::Hector" : {
          "file" : "lib/PSGI/Hector.pm",
-         "version" : "1.1"
+         "version" : "1.2"
       },
       "PSGI::Hector::Base" : {
          "file" : "lib/PSGI/Hector/Base.pm"
       },
       "PSGI::Hector::Log" : {
          "file" : "lib/PSGI/Hector/Log.pm"
+      },
+      "PSGI::Hector::Middleware" : {
+         "file" : "lib/PSGI/Hector/Middleware.pm"
       },
       "PSGI::Hector::Request" : {
          "file" : "lib/PSGI/Hector/Request.pm"
@@ -80,5 +87,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "1.1"
+   "version" : "1.2"
 }

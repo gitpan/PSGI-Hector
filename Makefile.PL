@@ -12,11 +12,15 @@ WriteMakefile
                    'File::Spec' => 0,
                    'Data::Dumper' => 0,
                    'Class::Load' => 0,
+                   'Cache::FileCache' => 0,
                    'Template' => 0,
                    'Carp' => 0,
                    'Test::More' => 0,
+                   'Plack::Middleware::Deflater' => 0,
                    'HTTP::Response' => 0,
+                   'File::Temp' => 0,
                    'CGI::Simple::Cookie' => 0,
+                   'Plack::Middleware::Static::Minifier' => 0,
                    'File::Basename' => 0
                  }
 )
