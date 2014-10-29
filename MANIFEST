@@ -12,7 +12,10 @@ lib/PSGI/Hector/Response/Raw.pm
 lib/PSGI/Hector/Response/TemplateToolkit.pm
 lib/PSGI/Hector/Session.pm
 lib/PSGI/Hector/Utils.pm
+Makefile.PL
 MANIFEST			This list of files
+META.json
+META.yml
 README
 script/hector_hello.psgi
 t/00_use.t
@@ -20,6 +23,4 @@ t/01_hector.t
 t/02_response_raw.t
 t/03_pod.t
 t/04_session.t
-Makefile.PL
-META.yml
-META.json
+t/05_request.t
