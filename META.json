@@ -34,10 +34,14 @@
             "File::Basename" : "0",
             "File::Spec" : "0",
             "HTTP::Response" : "0",
+            "Hash::MultiValue" : "0",
             "IO::Compress::Gzip" : "0",
             "JavaScript::Minifier::XS" : "0",
             "Plack" : "0",
+            "Plack::Middleware::Deflater" : "0",
             "Plack::Middleware::MCCS" : "0",
+            "Plack::Middleware::ReverseProxy" : "0",
+            "Plack::Middleware::ReverseProxyPath" : "0",
             "Template" : "0",
             "perl" : "5.006"
          }
@@ -46,7 +50,7 @@
    "provides" : {
       "PSGI::Hector" : {
          "file" : "lib/PSGI/Hector.pm",
-         "version" : "1.3"
+         "version" : "1.4"
       },
       "PSGI::Hector::Base" : {
          "file" : "lib/PSGI/Hector/Base.pm"
@@ -91,5 +95,5 @@
          "url" : "https://github.com/thedumbterminal/PSGI-Hector"
       }
    },
-   "version" : "1.3"
+   "version" : "1.4"
 }

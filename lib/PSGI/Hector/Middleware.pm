@@ -18,8 +18,9 @@ Wraps the application in additional middleware.
 
 =cut
 
+use strict;
+use warnings;
 use Plack::Builder;
-use base ("Plack::Builder", "PSGI::Hector::Log");
 #########################################################
 
 =pod
@@ -43,6 +44,13 @@ sub wrap{
 	my($class, $app) = @_;
 	
 	builder{
+
+		# ReverseProxy fixes scheme/host/port
+		enable "ReverseProxy";
+
+		# ReverseProxyPath uses new headers
+		# fixes SCRIPT_NAME and PATH_INFO
+		enable "ReverseProxyPath";
 
 		#minify assets on production
 		enable_if{$ENV{'ENV'} && $ENV{'ENV'} eq "production"} "Plack::Middleware::MCCS",

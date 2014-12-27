@@ -15,7 +15,8 @@ PSGI::Hector - Very simple PSGI web framework
 	###########################
 	###########################
 	package App;
-	use base qw(PSGI::Hector);
+	use PSGI::Hector;
+	use parent qw(PSGI::Hector);
 	###########################
 	sub handleDefault{
 		#add code here for landing page
@@ -35,11 +36,11 @@ use warnings;
 use Carp;
 use File::Basename;
 use Class::Load qw(is_class_loaded);
-use base qw(PSGI::Hector::Base PSGI::Hector::Utils PSGI::Hector::Log);
+use parent qw(PSGI::Hector::Base PSGI::Hector::Utils PSGI::Hector::Log);
 use PSGI::Hector::Response;
 use PSGI::Hector::Session;	#for session management
 use PSGI::Hector::Request;
-our $VERSION = "1.3";
+our $VERSION = "1.4";
 #########################################################
 
 =head2 init(\%options)
@@ -447,6 +448,17 @@ To change the session prefix characters use the following code at the top of you
 To change the session file save path use the following code at the top of your script:
 
 	$PSGI::Hector::Session::path = "/var/tmp";
+	
+=head2 Reverse proxies
+
+To run your application behind a reverse proxy using apache, please use the following setup:
+
+	<Location /psgi>
+		RequestHeader set X-Forwarded-Script-Name /psgi
+		RequestHeader set X-Traversal-Path /
+		ProxyPass http://localhost:8080/
+		ProxyPassReverse http://localhost:8080/
+	</Location>
 
 =head1 Author
 

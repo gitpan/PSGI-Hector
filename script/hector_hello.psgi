@@ -1,19 +1,14 @@
 #run using the following command:
-#plack script/hector_hello.psgi
+#plackup script/hector_hello.psgi
 use strict;
 use warnings;
 use lib qw(lib);
 use PSGI::Hector::Middleware;
 
-my $app = sub {
-	my $env = shift;
-	my $options = {
-		'responsePlugin' => 'PSGI::Hector::Response::Raw',
-		'checkReferer' => 0
-	};
-	my $h = App->new($options, $env);
-	return $h->run();	#do this thing!
-};
+my $app = App->init({
+	'responsePlugin' => 'PSGI::Hector::Response::Raw',
+	'checkReferer' => 0
+});
 
 PSGI::Hector::Middleware->wrap($app);
 
@@ -22,7 +17,7 @@ PSGI::Hector::Middleware->wrap($app);
 package App;
 use strict;
 use warnings;
-use base qw(PSGI::Hector);
+use parent qw(PSGI::Hector);
 ###########################################
 sub handleDefault{
 	my $h = shift;
